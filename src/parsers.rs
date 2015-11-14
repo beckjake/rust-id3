@@ -229,7 +229,11 @@ macro_rules! decode_part {
             let (end, with_delim) = find_delim!($bytes, $params.encoding, $i, $terminated);
             $i = with_delim; Some(&$i);
 
-            try!(($params.string_func)(&$bytes[start..end]))
+            if start == end {
+                "".to_string()
+            } else {
+                try!(($params.string_func)(&$bytes[start..end]))
+            }
         }
     };
     ($bytes: ident, $params:ident, $i:ident, text()) => {
@@ -241,7 +245,11 @@ macro_rules! decode_part {
             };
             $i = with_delim; Some(&$i);
 
-            try!(($params.string_func)(&$bytes[start..end]))
+            if start == end {
+                "".to_string()
+            } else {
+                try!(($params.string_func)(&$bytes[start..end]))
+            }
         }
     };
     ($bytes:ident, $params:ident, $i:ident, fixed_string($len:expr)) => {
